@@ -10,3 +10,23 @@ Routes
 
 Router
     *<Route path="/login" element={<Login />} /> → jab URL /login ho, toh Login component dikhao
+
+
+How to delete commit in github?
+1: Soft Reset (Sirf Commit delete hoga, Code safe rahega)
+   *1. Local machine par latest commit ko delete karein
+        git reset --soft HEAD~1
+
+   *2. GitHub par changes ko update (push) karein
+        git push origin main --force
+
+2: Hard Reset (Commit aur Code dono poori tarah delete ho jayenge)
+    *1. Local machine se commit aur code dono ko saaf karein
+        git reset --hard HEAD~1
+    *# 2. GitHub par force push karke wipe out karein
+        git push origin main --force
+
+
+Agar Home.jsx pages mein component ko import karke use karna ho
+ import UserCard from "../components/UserCard";
+  *../ matlab "ek folder peeche jao", phir components folder mein jao
