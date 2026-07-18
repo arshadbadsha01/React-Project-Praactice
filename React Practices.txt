@@ -1,0 +1,12 @@
+task.trim()
+    *ye trim method kya karta hai shuru aur end se extra spaces hata deta hai
+
+
+React Router
+    *taaki Login, Register, Home teeno pages ke beech navigate kar sako.
+
+Routes
+    *<Routes> → sabhi routes ka container
+
+Router
+    *<Route path="/login" element={<Login />} /> → jab URL /login ho, toh Login component dikhao
