@@ -20,12 +20,14 @@ const App = () => {
   };
 
   const startEdit = (index) => {
-    setTask(todos[index]); // input mein purana text add hota hai update karne ke liye
+    setTask(todos[index].text); // input mein purana text add hota hai update karne ke liye
     setEditTodo(index); //aur ye yaad rakta hai kounsa index edit ho ra hai
   };
 
   const saveTodo = () => {
-    setTodos((prev) => prev.map((item, i) => (i === editTodo ? task : item)));
+    setTodos((prev) =>
+      prev.map((item, i) => (i === editTodo ? { ...item, text: task } : item)),
+    );
     setTask(""); // edit hone ka baad input ko khaali kardo
     setEditTodo(null); // edit mode se bahar aa jao
   };
@@ -47,20 +49,24 @@ const App = () => {
           {editTodo !== null ? "Save" : "Add"}
         </button>
       </div>
-      <ul>
-        {todos.map((item, index) => (
-          <li key={index}>
-            <input
-              type="checkbox"
-              checked={item.completed}
-              onChange={() => toggleComplete(index)}
-            />
-            {item.text}
-            <button onClick={() => deleteTodo(index)}>Delete</button>
-            <button onClick={() => startEdit(index)}>Edit</button>
-          </li>
-        ))}
-      </ul>
+      {todos.length === 0 ? (
+        <p>No tasks yet, add one!</p>
+      ) : (
+        <ul>
+          {todos.map((item, index) => (
+            <li key={index}>
+              <input
+                type="checkbox"
+                checked={item.completed}
+                onChange={() => toggleComplete(index)}
+              />
+              {item.text}
+              <button onClick={() => deleteTodo(index)}>Delete</button>
+              <button onClick={() => startEdit(index)}>Edit</button>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };

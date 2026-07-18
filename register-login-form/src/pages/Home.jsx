@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import UserCard from "../components/UserCard";
 
 const Home = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const users = [
     { name: "Arshad", email: "arshad@email.com", age: 22 },
     { name: "Akbar", email: "akbar@email.com", age: 40 },
@@ -10,7 +11,12 @@ const Home = () => {
   ];
   return (
     <div>
-      <h1>Welcome to Home Page</h1>
+      {isLoggedIn ? (
+        <button onClick={() => setIsLoggedIn(false)}>Logout</button>
+      ) : (
+        <button onClick={() => setIsLoggedIn(true)}>Login</button>
+      )}
+      {isLoggedIn && <p>Hello, you are logged in!</p>}
       <div>
         {users.map((user, index) => (
           <UserCard
