@@ -27,6 +27,15 @@ How to delete commit in github?
         git push origin main --force
 
 
+try-catch ka kaam hai app ko crash hone se bachana.
+  *try {: "Iske andar ka code chala ke dekho..."
+  *catch (error) {: "...aur agar koi error/galti aaye, toh app crash mat hone do, Seedha yahan aa jao."
+
+
 Agar Home.jsx pages mein component ko import karke use karna ho
  import UserCard from "../components/UserCard";
   *../ matlab "ek folder peeche jao", phir components folder mein jao
+
+
+1. Backend
+    npm install -D nodemon (-D matlab development dependency)

@@ -1,85 +1,309 @@
 import React, { useState } from "react";
 
 const App = () => {
-  const [input, setInput] = useState("");
+  const [expression, setExpression] = useState(""); // upar chhoti line
+  const [input, setInput] = useState(""); // neeche bada
+  const [history, setHistory] = useState([]);
+  const [memory, setMemory] = useState(0);
 
   const calculate = () => {
+    if (input === "") return; // agar naya number type hi nahi hua, calculate mat karo
     try {
-      setInput(eval(input).toString());
+      const fullExpression = expression + input;
+      const result = eval(fullExpression);
+      const calculationText = fullExpression + " = " + result; // Yeh history mein dikhane ke liye use karte hai
+
+      setHistory((prev) => [...prev, calculationText]); // purane calculation ke neeche naya add kardo
+      setExpression(fullExpression + " = ");
+      setInput(result.toString());
     } catch (error) {
-      setInput("Error");
+      setInput("");
+      setExpression("");
     }
+  };
+
+  const historyClear = (index) => {
+    setHistory((prev) => prev.filter((item, i) => i !== index));
+  };
+
+  const isOperator = (char) => ["+", "-", "*", "/", "%"].includes(char);
+
+  const handleClick = (value) => {
+    if (isOperator(value)) {
+      if (input === "") return; // agar number type hi nahi hua, calculate mat karo
+
+      if (expression.endsWith("=")) {
+        // Agar abhi result aaya tha (=), toh purani expression ignore karo, fresh se shuru karo
+        setExpression(input + " " + value + " ");
+      } else {
+        setExpression((prev) => prev + input + " " + value + " ");
+      }
+      setInput("");
+    } else {
+      if (expression.endsWith("=")) {
+        // Naya number type ho raha hai result ke baad — purani expression clear karo
+        setExpression("");
+      }
+      setInput((prev) => prev + value);
+    }
+  };
+
+  const clearInput = () => {
+    setInput(""); // sirf current input clear, expression untouched
+  };
+
+  const clear = () => {
+    setExpression("");
+    setInput("");
   };
 
   const handleBackspace = () => {
     setInput((prev) => prev.slice(0, -1)); // slice(0, -1) ka matlab hai: shuruat se lekar aakhri ek character chhod kar baki sab rakho
   };
 
-  const clear = () => {
-    setInput("");
+  const addMemory = () => {
+    if (input === "") return;
+    setMemory((prev) => prev + Number(input));
   };
 
-  const handleClick = (value) => {
-    setInput((prev) => prev + value);
+  const subtractMemory = () => {
+    if (input === "") return;
+    setMemory((prev) => prev - Number(input));
   };
+
+  const recallMemory = () => {
+    setInput(memory.toString());
+  };
+
+  const clearMemory = () => {
+    setMemory(0);
+  };
+
+  // Common button style ek jagah define kar diya, taaki har button mein baar-baar na likhna pade
+  const btnStyle =
+    "h-14 rounded-lg text-lg font-medium bg-gray-700 text-white hover:bg-gray-800 active:scale-95 transition-all";
+  const operatorStyle =
+    "h-14 rounded-lg text-lg font-medium bg-orange-500 text-white hover:bg-orange-700 active:scale-95 transition-all";
+  const utilityStyle =
+    "h-14 rounded-lg text-lg font-medium bg-gray-500 text-white hover:bg-gray-400 active:scale-95 transition-all";
+
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(4, 100px)", // Poora calculator 400px ka hi rahega
-        marginTop: "30px",
-        gap: "8px",
-        fontFamily: "sans-serif",
-      }}
-    >
-      <input
-        type="text"
-        value={input}
-        disabled
-        style={{
-          gridColumn: "span 3",
-          textAlign: "right",
-          padding: "10px",
-          fontSize: "18px",
-        }}
-      />
-      <button
-        onClick={handleBackspace}
-        style={{ padding: "10px", fontSize: "18px", cursor: "pointer" }}
-      >
-        ⌫
-      </button>
+    <div className="min-h-screen flex items-center justify-center bg-gray-400">
+      <div className="w-[340px] bg-gray-600 rounded-2xl shadow-2xl p-4">
+        {/* Expression - upar chhoti line */}
+        <div className="text-right text-gray-200 text-sm min-h-[20px] px-2">
+          {expression}
+        </div>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(4, 100px)",
-          marginTop: "10px",
-          gap: "8px",
-        }}
-      >
-        <button onClick={() => handleClick("1")}>1</button>
-        <button onClick={() => handleClick("2")}>2</button>
-        <button onClick={() => handleClick("3")}>3</button>
-        <button onClick={clear}>C</button>
+        {/* Input - bada display */}
+        <div className="text-right text-white text-4xl font-semibold px-2 py-4 mb-4 truncate">
+          {input || "0"}
+        </div>
+        <div className="grid grid-cols-4 gap-2 mb-2">
+          <button onClick={clearMemory} className={utilityStyle}>
+            MC
+          </button>
+          <button onClick={recallMemory} className={utilityStyle}>
+            MR
+          </button>
+          <button onClick={addMemory} className={utilityStyle}>
+            M+
+          </button>
+          <button onClick={subtractMemory} className={utilityStyle}>
+            M-
+          </button>
+        </div>
+        {memory !== 0 && (
+          <p className="text-xs text-gray-400 text-right px-2">M: {memory} </p>
+        )}
 
-        <button onClick={() => handleClick("4")}>4</button>
-        <button onClick={() => handleClick("5")}>5</button>
-        <button onClick={() => handleClick("6")}>6</button>
-        <button onClick={() => handleClick("+")}>+</button>
+        {/* Buttons Grid */}
+        <div className="grid grid-cols-4 gap-2">
+          <button onClick={() => handleClick("%")} className={utilityStyle}>
+            %
+          </button>
+          <button onClick={clearInput} className={utilityStyle}>
+            CI
+          </button>
+          <button onClick={clear} className={utilityStyle}>
+            C
+          </button>
+          <button onClick={handleBackspace} className={utilityStyle}>
+            ⌫
+          </button>
 
-        <button onClick={() => handleClick("7")}>7</button>
-        <button onClick={() => handleClick("8")}>8</button>
-        <button onClick={() => handleClick("9")}>9</button>
-        <button onClick={() => handleClick("-")}>-</button>
+          <button onClick={() => handleClick("7")} className={btnStyle}>
+            7
+          </button>
+          <button onClick={() => handleClick("8")} className={btnStyle}>
+            8
+          </button>
+          <button onClick={() => handleClick("9")} className={btnStyle}>
+            9
+          </button>
+          <button onClick={() => handleClick("*")} className={operatorStyle}>
+            ×
+          </button>
 
-        <button onClick={() => handleClick("/")}>/</button>
-        <button onClick={() => handleClick("0")}>0</button>
-        <button onClick={calculate}>=</button>
-        <button onClick={() => handleClick("*")}>*</button>
+          <button onClick={() => handleClick("4")} className={btnStyle}>
+            4
+          </button>
+          <button onClick={() => handleClick("5")} className={btnStyle}>
+            5
+          </button>
+          <button onClick={() => handleClick("6")} className={btnStyle}>
+            6
+          </button>
+          <button onClick={() => handleClick("-")} className={operatorStyle}>
+            −
+          </button>
+
+          <button onClick={() => handleClick("1")} className={btnStyle}>
+            1
+          </button>
+          <button onClick={() => handleClick("2")} className={btnStyle}>
+            2
+          </button>
+          <button onClick={() => handleClick("3")} className={btnStyle}>
+            3
+          </button>
+          <button onClick={() => handleClick("+")} className={operatorStyle}>
+            +
+          </button>
+
+          <button onClick={() => handleClick("/")} className={operatorStyle}>
+            ÷
+          </button>
+          <button onClick={() => handleClick("0")} className={btnStyle}>
+            0
+          </button>
+          <button onClick={() => handleClick(".")} className={btnStyle}>
+            .
+          </button>
+          <button
+            onClick={calculate}
+            className="h-14 rounded-lg text-lg font-medium bg-blue-500 text-white hover:bg-blue-700 active:scale-95 transition-all"
+          >
+            =
+          </button>
+        </div>
+      </div>
+
+      {/* History Panel */}
+      <div className="w-[340px] bg-gray-800 rounded-2xl shadow-2xl p-4 ml-4 max-h-[500px] overflow-y-auto">
+        <h2 className="text-white text-lg font-semibold mb-3">History</h2>
+        {history.length === 0 ? (
+          <p className="text-gray-400 text-sm">No history yet</p>
+        ) : (
+          <ul className="space-y-2">
+            {history.map((item, index) => (
+              <li
+                key={index}
+                className="flex justify-between items-center text-gray-300 text-sm text-right border-b border-gray-700 pb-2"
+              >
+                {item}{" "}
+                <button
+                  onClick={() => historyClear(index)}
+                  className="text-red-400 text-sm mt-3 hover:text-red-300 ml-3"
+                >
+                  Clear
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );
 };
 
 export default App;
+
+// import React, { useState } from "react";
+
+// const App = () => {
+//   const [input, setInput] = useState("");
+//   const [expression, setExpression] = useState("");
+//   const [history, setHistory] = useState([]);
+
+//   const isOperator = (char) => ["+", "-", "/", "*", "%"].includes(char);
+
+//   const calculate = () => {
+//     if (input === "") return;
+//     try {
+//       const fullExpression = expression + input;
+//       const result = eval(fullExpression);
+//       const calculationText = fullExpression + " = " + result;
+
+//       setHistory((prev) => [...prev, calculationText]);
+//       setExpression(fullExpression + " =");
+//       setInput(result.toString());
+//     } catch (error) {
+//       setInput("");
+//       setExpression("");
+//     }
+//   };
+
+//   const historyClear = (index) => {
+//     setHistory((prev) => prev.filter((item, i) => i !== index));
+//   };
+
+//   return (
+//     <div>
+//       <h1>Calculator App</h1>
+//       <div>
+//         <div>{expression} </div>
+//         <div>{input || "0"}</div>
+//         <button onClick={calculate}>=</button>
+//       </div>
+//       <div>
+//         {history.length === 0 ? (
+//           <p>No history yet</p>
+//         ) : (
+//           <ul>
+//             {history.map((item, index) => (
+//               <li key={index}>
+//                 {item} <button onClick={historyClear}>Clear</button>
+//               </li>
+//             ))}
+//           </ul>
+//         )}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default App;
+
+// import React, { useState } from "react";
+
+// const App = () => {
+//   const [input, setInput] = useState("");
+//   const [expression, setExpression] = useState("");
+//   const [history, setHistory] = useState([]);
+
+//   const isOperator = (char) => ["+", "-", "*", "/", "%"].includes(char);
+
+//   const calculate = () => {
+//     if (input === "") return;
+//     try {
+//       const fullExpression = expression + input;
+//       const result = eval(fullExpression);
+//       const calculationText = fullExpression + " =" + result;
+
+//       setHistory((prev) => [...prev, calculationText]);
+//       setExpression(fullExpression + " =");
+//       setInput(result.toString());
+//     } catch (error) {
+//       setInput("");
+//       setExpression("");
+//     }
+//   };
+
+//   const clearHistory = (index) => {
+//     setHistory((prev) => prev.filter((item, i) => i !== index));
+//   };
+//   return <div>App</div>;
+// };
+
+// export default App;
