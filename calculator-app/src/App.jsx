@@ -1,10 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const App = () => {
   const [expression, setExpression] = useState(""); // upar chhoti line
   const [input, setInput] = useState(""); // neeche bada
-  const [history, setHistory] = useState([]);
+  const [history, setHistory] = useState(() => {
+    const savedHistory = localStorage.getItem("my_history");
+    return savedHistory ? JSON.parse(savedHistory) : [];
+  });
   const [memory, setMemory] = useState(0);
+
+  useEffect(() => {
+    localStorage.setItem("my_history", JSON.stringify(history));
+  }, [history]);
 
   const calculate = () => {
     if (input === "") return; // agar naya number type hi nahi hua, calculate mat karo
