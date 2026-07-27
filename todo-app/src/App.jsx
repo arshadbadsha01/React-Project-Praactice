@@ -21,6 +21,13 @@ const App = () => {
     setTask("");
   };
 
+  const handleKeydown = (e) => {
+    if (e.key === "Enter") {
+      addTodo();
+      saveTodo();
+    }
+  };
+
   const toggleComplete = (index) => {
     setTodos((prev) =>
       prev.map((item, i) =>
@@ -60,6 +67,7 @@ const App = () => {
           <input
             type="text"
             value={task}
+            onKeyDown={handleKeydown}
             onChange={(e) => setTask(e.target.value)}
             placeholder="Write a task..."
             className="flex-1 bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
