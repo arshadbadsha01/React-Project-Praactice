@@ -11,10 +11,10 @@ const App = () => {
     try {
       const fullExpression = expression + input;
       const result = eval(fullExpression);
-      const calculationText = fullExpression + " = " + result; // Yeh history mein dikhane ke liye use karte hai
+      const expressionText = fullExpression + " = " + result; // Yeh history mein kaisa dikhna chaiye
 
-      setHistory((prev) => [...prev, calculationText]); // purane calculation ke neeche naya add kardo
-      setExpression(fullExpression + " = ");
+      setHistory((prev) => [...prev, expressionText]); // history mein purane calculation ke neeche naya calculation add kardo
+      setExpression(fullExpression + " ="); //expression mein kaise dikhna chaiye
       setInput(result.toString());
     } catch (error) {
       setInput("");
@@ -23,7 +23,7 @@ const App = () => {
   };
 
   const historyClear = (index) => {
-    setHistory((prev) => prev.filter((item, i) => i !== index));
+    setHistory((prev) => prev.filter((input, i) => i !== index));
   };
 
   const isOperator = (char) => ["+", "-", "*", "/", "%"].includes(char);
@@ -38,7 +38,7 @@ const App = () => {
       } else {
         setExpression((prev) => prev + input + " " + value + " ");
       }
-      setInput("");
+      setInput(""); //operator dabane ke baad input hamesha khali ho jaana chahiye kyuki fresh se type ho sake.
     } else {
       if (expression.endsWith("=")) {
         // Naya number type ho raha hai result ke baad — purani expression clear karo
@@ -218,92 +218,3 @@ const App = () => {
 };
 
 export default App;
-
-// import React, { useState } from "react";
-
-// const App = () => {
-//   const [input, setInput] = useState("");
-//   const [expression, setExpression] = useState("");
-//   const [history, setHistory] = useState([]);
-
-//   const isOperator = (char) => ["+", "-", "/", "*", "%"].includes(char);
-
-//   const calculate = () => {
-//     if (input === "") return;
-//     try {
-//       const fullExpression = expression + input;
-//       const result = eval(fullExpression);
-//       const calculationText = fullExpression + " = " + result;
-
-//       setHistory((prev) => [...prev, calculationText]);
-//       setExpression(fullExpression + " =");
-//       setInput(result.toString());
-//     } catch (error) {
-//       setInput("");
-//       setExpression("");
-//     }
-//   };
-
-//   const historyClear = (index) => {
-//     setHistory((prev) => prev.filter((item, i) => i !== index));
-//   };
-
-//   return (
-//     <div>
-//       <h1>Calculator App</h1>
-//       <div>
-//         <div>{expression} </div>
-//         <div>{input || "0"}</div>
-//         <button onClick={calculate}>=</button>
-//       </div>
-//       <div>
-//         {history.length === 0 ? (
-//           <p>No history yet</p>
-//         ) : (
-//           <ul>
-//             {history.map((item, index) => (
-//               <li key={index}>
-//                 {item} <button onClick={historyClear}>Clear</button>
-//               </li>
-//             ))}
-//           </ul>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default App;
-
-// import React, { useState } from "react";
-
-// const App = () => {
-//   const [input, setInput] = useState("");
-//   const [expression, setExpression] = useState("");
-//   const [history, setHistory] = useState([]);
-
-//   const isOperator = (char) => ["+", "-", "*", "/", "%"].includes(char);
-
-//   const calculate = () => {
-//     if (input === "") return;
-//     try {
-//       const fullExpression = expression + input;
-//       const result = eval(fullExpression);
-//       const calculationText = fullExpression + " =" + result;
-
-//       setHistory((prev) => [...prev, calculationText]);
-//       setExpression(fullExpression + " =");
-//       setInput(result.toString());
-//     } catch (error) {
-//       setInput("");
-//       setExpression("");
-//     }
-//   };
-
-//   const clearHistory = (index) => {
-//     setHistory((prev) => prev.filter((item, i) => i !== index));
-//   };
-//   return <div>App</div>;
-// };
-
-// export default App;
