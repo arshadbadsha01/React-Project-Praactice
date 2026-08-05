@@ -37,5 +37,32 @@ Agar Home.jsx pages mein component ko import karke use karna ho
   *../ matlab "ek folder peeche jao", phir components folder mein jao
 
 
+1. Calculator app ka APK Bhana ne ke liye hum Android Studio app ka istemal karre hai
+  *Step 1:Capacitor install karo
+     npm install @capacitor/core @capacitor/cli
+     npx cap init
+  *Step 2: Android platform add karo
+    npm install @capacitor/android
+    npx cap add android
+  *Step 3: Apna React app build karo
+    npm run build  -  Ye ek dist folder banayega jisme tumhari final, optimized website files hongi.
+  *Step 4: Build ko Capacitor mein sync karo
+    npx cap sync
+  *Step 5: Android Studio mein kholo
+    npx cap open android  -  Ye automatically Android Studio kholega tumhare project ke saath.
+  *Step 6: Android Studio se APK banao
+    Android Studio ke andar:
+     1. Top menu se Build → Build Bundle(s) / APK(s) → Build APK(s)
+     2. Thoda wait karo (compile hone mein time lagega)
+     3. Ek notification aayegi "APK generated" — usme "locate" click karo
+     4. Tumhari .apk file mil jayegi (usually app/build/outputs/apk/debug/ folder mein)
+
+
+
 1. Backend
     npm install -D nodemon (-D matlab development dependency)
+
+
+router.delete("/:id")
+ *:id ek dynamic parameter hai
+ *uska matlab URL ka wo part variable hai. Jaise agar tum call karo DELETE /api/history/5, toh req.params.id mein "5" mil jayega automatically.

@@ -1,0 +1,5 @@
+{
+  "appId": "com.calculator.app",
+  "appName": "calculator-app",
+  "webDir": "dist"
+}
