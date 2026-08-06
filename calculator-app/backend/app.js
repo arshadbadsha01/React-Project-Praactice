@@ -5,7 +5,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "https://react-project-practice-pi.vercel.app/",
+    origin: "https://react-project-practice-pi.vercel.app",
     credentials: true,
   }),
 );
