@@ -13,7 +13,9 @@ const App = () => {
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-        const res = await axios.get("http://localhost:5001/api/history/all");
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/history/all`,
+        );
         setHistory(
           res.data.history.map((item) => ({
             id: item.id,
@@ -36,7 +38,7 @@ const App = () => {
 
       // DB mein save karo
       const saveRes = await axios.post(
-        "http://localhost:5001/api/history/save",
+        `${import.meta.env.VITE_API_URL}/api/history/save`,
         {
           expression: fullExpression,
           result: result.toString(),
@@ -59,7 +61,7 @@ const App = () => {
   const historyClear = async (id, index) => {
     try {
       if (id) {
-        await axios.delete(`http://localhost:5001/api/history/${id}`);
+        await axios.delete(`${import.meta.env.VITE_API_URL}/api/history/${id}`);
       }
       setHistory((prev) => prev.filter((_, i) => i !== index));
     } catch (error) {

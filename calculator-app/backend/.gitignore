@@ -3,3 +3,18 @@ node_modules/
 dist/
 build/
 .DS_Store
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor settings
+.vscode/
+.idea/
+
+# Coverage reports
+coverage/
+
+# Cache
+.cache/
+.parcel-cache/
